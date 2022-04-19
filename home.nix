@@ -1,11 +1,18 @@
-{ config, pkgs, ... }:
+{ config, pkgs, lib, ... }:
 
 {
+  imports = [
+    (import ./config/neovim/default.nix)
+  ];
+
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
-  home.packages = [
-    pkgs.tmux
+  home.packages = with pkgs; [
+    any-nix-shell
+    htop
+    texlive.combined.scheme-full
+    tmux
   ];
 
   programs.git = {
@@ -20,5 +27,40 @@
 
   programs.fish = {
     enable = true;
+
+    shellAliases = {
+      ls = "ls -F -h --color -v";
+      ll = "ls -l";
+      ".." = "cd ..";
+    };
+
+    interactiveShellInit = ''
+      any-nix-shell fish --info-right | source
+    '';
   };
+
+  xdg.configFile."fish/conf.d/colorscheme.fish".source = ./config/fish/tokyonight_night.fish;
+
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      ls = "ls -F -h --color -v";
+      ll = "ls -l";
+      ".." = "cd ..";
+    };
+
+    initExtra = ''
+      exec fish
+    '';
+  };
+
+  xdg.configFile."tmux/tmux.conf".text = ''
+    # mouse support
+    set -g mouse on
+
+    set -g default-terminal "xterm-256color"
+
+    # Overrides the default color
+    set-option -ga terminal-overrides ",xterm-256color:Tc"
+  '';
 }

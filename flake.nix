@@ -2,28 +2,31 @@
   description = "MacOS Home Manager configuration";
 
   inputs = {
-    home-manager.url = "github:nix-community/home-manager";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    home-manager.inputs.nixpkgs.follows = "nixpkgs";
+    home-manager = {
+      url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
   };
 
-  outputs = { home-manager, ... }:
+  outputs = { home-manager, neovim-nightly-overlay, ... }:
     let
       system = "x86_64-darwin";
       username = "winston";
+      overlays = [ neovim-nightly-overlay.overlay ];
     in {
       homeConfigurations.${username} = home-manager.lib.homeManagerConfiguration {
-        # Specify the path to your home configuration here
-        configuration = import ./home.nix;
-
         inherit system username;
-        homeDirectory = "/Users/${username}";
 
-        # Update the state version as needed.
+        homeDirectory = "/Users/${username}";
         stateVersion = "22.05";
 
-        # Optionally use extraSpecialArgs
-        # to pass through arguments to home.nix
+    	  extraModules = [
+    	    { nixpkgs.overlays = overlays; }
+    	  ];
+
+        configuration = import ./home.nix;
       };
     };
 }
