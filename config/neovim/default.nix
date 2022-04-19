@@ -1,4 +1,4 @@
-{ pkgs, ...}:
+{ pkgs, ... }:
 
 let
   neo-tree = pkgs.vimUtils.buildVimPluginFrom2Nix {
@@ -30,15 +30,6 @@ let
     };
   };
 
-  #nvim-web-devicons = pkgs.vimUtils.buildVimPluginFrom2Nix {
-  #  name = "nvim-web-devicons";
-  #  src = pkgs.fetchgit {
-  #    url = "https://github.com/kyazdani42/nvim-web-devicons";
-  #    rev = "09e62319974d7d7ec7e53b974724f7942470ef78";
-  #    sha256 = "mOvTXbJ2uQseNuQfdTrUuFHWRg2ia9yXld+4WiBVxDg=";
-  #  };
-  #};
-
 in {
   programs.neovim = {
     enable = true;
@@ -52,9 +43,10 @@ in {
       nui
       plenary
       nvim-web-devicons
-      coc-nvim
-      tokyonight-nvim
       barbar-nvim
+      coc-nvim
+      telescope-nvim
+      tokyonight-nvim
       which-key-nvim
     ];
 
@@ -75,4 +67,9 @@ in {
       set expandtab
     '';
   };
+
+  home.packages = with pkgs; [
+    ripgrep
+    fd
+  ];
 }
