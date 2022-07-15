@@ -42,6 +42,7 @@
   };
 
   xdg.configFile."fish/conf.d/colorscheme.fish".source = ./config/fish/tokyonight_night.fish;
+  xdg.configFile."fish/completions/terraform.fish".source = ./config/fish/completions/terraform.fish;
 
   programs.zsh = {
     enable = true;
