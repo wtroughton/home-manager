@@ -11,6 +11,7 @@
   home.packages = with pkgs; [
     any-nix-shell
     htop
+    nodejs-16_x
     texlive.combined.scheme-full
     tmux
   ];
@@ -18,7 +19,7 @@
   programs.git = {
     enable = true;
     userName = "Winston Troughton";
-    userEmail = "winston@wlt.dev";
+    userEmail = "winston@troughton.net";
     extraConfig = {
       init = { defaultBranch = "main"; };
       github = { user = "wtroughton"; };
@@ -36,6 +37,7 @@
 
     interactiveShellInit = ''
       any-nix-shell fish --info-right | source
+      set -Ux NIXPKGS_ALLOW_UNFREE 1
     '';
   };
 
@@ -63,4 +65,6 @@
     # Overrides the default color
     set-option -ga terminal-overrides ",xterm-256color:Tc"
   '';
+
+  nixpkgs.config.allowUnfree = true;
 }

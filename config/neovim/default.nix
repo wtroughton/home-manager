@@ -45,6 +45,7 @@ in {
       nvim-web-devicons
       barbar-nvim
       coc-nvim
+      jsonc-vim
       telescope-nvim
       tokyonight-nvim
       which-key-nvim
@@ -65,6 +66,9 @@ in {
       set tabstop=2
       set shiftwidth=2
       set expandtab
+
+      " tsconfig.json is actually jsonc, help TypeScript set the correct filetype
+      autocmd BufRead,BufNewFile tsconfig.json set filetype=jsonc
     '';
   };
 
